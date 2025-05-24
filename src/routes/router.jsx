@@ -1,6 +1,7 @@
 import {createBrowserRouter} from "react-router-dom";
 import Login from "../components/Login.jsx";
 import Home from "../components/Home.jsx";
+import Movies from "../components/Movies.jsx";
 import MovieDetails from "../components/MovieDetails.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 const router = createBrowserRouter([
@@ -21,6 +22,14 @@ const router = createBrowserRouter([
         element: (
             <ProtectedRoute>
                 <MovieDetails />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: "/movies",
+        element: (
+            <ProtectedRoute>
+                <Movies/>
             </ProtectedRoute>
         ),
     },
