@@ -1,68 +1,58 @@
-import {useDispatch, useSelector} from 'react-redux'
-import React,{useState} from "react";
-import {login} from "../redux/authSlice.js"
-import {useNavigate} from "react-router-dom"
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { Form, Input, Button, Typography } from 'antd';
+import { login } from '../redux/authSlice';
+
+const { Title } = Typography;
 
 const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [errors, setErrors] = useState({});
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const validate = () => {
-        const newErrors = {};
-        if(!email){
-            newErrors.email = "Email is required";
-        }
-            else if(!/\S+@\S+\.\S+/.test(email)){
-                newErrors.email = "Invalid email ";
-            }
-        if(!password){
-            newErrors.password = "Password is required";
-        }
-            else if(password.length < 6){
-                newErrors.password = "Password must be at least 6 characters";
-            }
-            return newErrors;
-    }
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const validationErrors = validate();
-        if(Object.keys(validationErrors).length){
-            setErrors(validationErrors);
-            return;
-        }
-        dispatch(login({email}));
-        navigate("/Home");
 
-    }
-
+    const onFinish = (values) => {
+        dispatch(login({ email: values.email }));
+        navigate('/Home');
+    };
 
     return (
-        <div className="login-container">
-            <h2>Login</h2>
-            <form onSubmit={handleSubmit} noValidate>
-                <div>
-                    <label htmlFor="email">Email address</label>
-                    <input type="email"
-                           value={email}
-                           onChange={(e) => setEmail(e.target.value)}
-                    />
-                    {errors.email && <small>{errors.email}</small> }
-                </div>
-                <div>
-                    <label htmlFor="password">Password</label>
-                    <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    />
-                    {errors.password && <small>{errors.password}</small> }
-                </div>
-                <button type="submit">Log In</button>
-            </form>
-        </div>
-    )
+        <div style={{ maxWidth: 400, margin: '100px auto', padding: 24, boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}>
+            <Title level={2} style={{ textAlign: 'center' }}>Login</Title>
+            <Form
+                layout="vertical"
+                onFinish={onFinish}
+                autoComplete="off"
+            >
+                <Form.Item
+                    label="Email address"
+                    name="email"
+                    rules={[
+                        { required: true, message: 'Email is required' },
+                        { type: 'email', message: 'Please enter a valid email address' },
+                    ]}
+                >
+                    <Input placeholder="Enter your email" />
+                </Form.Item>
 
-}
+                <Form.Item
+                    label="Password"
+                    name="password"
+                    rules={[
+                        { required: true, message: 'Password is required' },
+                        { min: 6, message: 'Password must be at least 6 characters' },
+                    ]}
+                >
+                    <Input.Password placeholder="Enter your password" />
+                </Form.Item>
+
+                <Form.Item>
+                    <Button type="primary" htmlType="submit" block>
+                        Log In
+                    </Button>
+                </Form.Item>
+            </Form>
+        </div>
+    );
+};
+
 export default Login;
