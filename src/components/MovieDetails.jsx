@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams,useNavigate } from 'react-router-dom';
 import { Card, Typography, Spin, Button, message } from 'antd';
 import { fetchMovieById } from '../dataFetch';
 
@@ -7,6 +7,7 @@ const { Title, Paragraph } = Typography;
 
 const MovieDetails = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [movie, setMovie] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isFavorite, setIsFavorite] = useState(false);
@@ -80,6 +81,7 @@ const MovieDetails = () => {
                     {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
                 </Button>
             </Card>
+            <Button type="primary" size="large" onClick={() => navigate('/Home')}>Home</Button>
         </div>
     );
 };

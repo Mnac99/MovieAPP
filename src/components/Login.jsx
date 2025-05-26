@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Form, Input, Button, Typography } from 'antd';
+import { Form, Input, Button, Typography,message } from 'antd';
 import { login } from '../redux/authSlice';
 
 const { Title } = Typography;
@@ -11,9 +11,20 @@ const Login = () => {
     const navigate = useNavigate();
 
     const onFinish = (values) => {
-        dispatch(login({ email: values.email }));
-        navigate('/Home');
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        const matchedUser = users.find(
+            u => u.email === values.email && u.password === values.password
+        );
+
+        if (matchedUser) {
+            dispatch(login({ email: matchedUser.email }));
+            localStorage.setItem('user', JSON.stringify(matchedUser));
+            navigate('/Home');
+        } else {
+            message.error('Invalid email or password');
+        }
     };
+
 
     return (
         <div style={{ maxWidth: 400, margin: '100px auto', padding: 24, boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}>
@@ -50,6 +61,11 @@ const Login = () => {
                         Log In
                     </Button>
                 </Form.Item>
+                <p style={{ textAlign: 'center' }}>
+                    Don't have an account?{' '}
+                    <a onClick={() => navigate('/register')}>Register here</a>
+                </p>
+
             </Form>
         </div>
     );

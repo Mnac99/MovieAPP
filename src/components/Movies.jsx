@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Row, Col, Card, Spin, message } from 'antd';
+import {Input, Row, Col, Card, Spin, message, Button} from 'antd';
 import { searchMovies } from '../dataFetch';
 import { useNavigate } from 'react-router-dom';
 
@@ -65,6 +65,7 @@ const Movies = () => {
                     ))}
                 </Row>
             )}
+            <Button type="primary" size="large" onClick={() => navigate('/Home')}>Home</Button>
         </div>
     );
 };
